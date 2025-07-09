@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<h1 align="left">Welcome,<span th:text="${username}"></span><p align="right"><a href="/main?Logout" >Log out</a></p></h1>
+<h1 align="center">You have bin login <span th:text="${count}"></span></h1>
+
+<h1 align="center">list Products</h1>
+<table align="center" >
+    <tr>
+    <th>Product name</th>
+    <th>Product price</th>
+</tr>
+    <tr th:each="product :${products}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.price}"></td>
+
+    </tr>
+
+</table>
+<br>
+<h1 align="center">add product</h1>
+<form action="/product" method="post" align="center">
+    Name: <input
+        type="text"
+        name="name">
+    <br/>
+    Price: <input
+        type="number"
+        step="any"
+        name="price"
+><br/>
+    <button type="submit" align="center">Add product</button>
+
+
+
+</form>
+
+
+</body>
+</html>

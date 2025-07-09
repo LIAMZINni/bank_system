@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>История транзакций</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        .transaction-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        .transaction-details {
+            flex-grow: 1;
+        }
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .transaction-date {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .transaction-type {
+            text-transform: capitalize;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h2 class="text-center mb-4">История транзакций</h2>
+
+                <!-- Список транзакций -->
+                <div th:each="transaction : ${transactions}" class="transaction-item">
+                    <!-- Иконка в зависимости от типа транзакции -->
+                    <div class="transaction-icon">
+                        <i th:if="${transaction.transactionType == 'BY_CARD'}" class="fas fa-credit-card text-primary"></i>
+                        <i th:if="${transaction.transactionType == 'BY_PHONE_NUMBER'}" class="fas fa-mobile-alt text-success"></i>
+                    </div>
+
+                    <!-- Детали транзакции -->
+                    <div class="transaction-details">
+                        <div class="transaction-type" th:text="${transaction.transactionType.displayName}">Тип транзакции</div>
+                        <div class="transaction-description" th:text="${transaction.description}">Описание</div>
+                        <div class="transaction-date" th:text="${#dates.format(transaction.createdAt, 'dd.MM.yyyy HH:mm')}">Дата</div>
+                        <div class="transaction-accounts">
+                            <span th:text="${transaction.fromAccount.accountNumber}">Счет отправителя</span> →
+                            <span th:text="${transaction.toAccount.accountNumber}">Счет получателя</span>
+                        </div>
+                    </div>
+
+                    <!-- Сумма и валюта транзакции -->
+                    <div class="transaction-amount" th:classappend="${transaction.transactionType == 'BY_CARD'} ? 'text-danger' : 'text-success'">
+                        <span th:text="${transaction.amount} + ' ' + ${transaction.currency}">Сумма</span>
+                    </div>
+
+                </div>
+
+                <!-- Кнопка "Назад" -->
+                <div class="text-center mt-4">
+                    <a href="javascript:history.back()" class="btn btn-primary">Назад</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
